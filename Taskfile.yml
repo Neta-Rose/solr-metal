@@ -1,0 +1,28 @@
+version: "3"
+
+tasks:
+  sync:
+    desc: Install project dependencies in a local uv-managed environment
+    cmds:
+      - uv sync --extra dev
+
+  test:
+    desc: Run unit tests
+    cmds:
+      - uv run pytest
+
+  lint:
+    desc: Run static checks
+    cmds:
+      - uv run ruff check .
+      - uv run mypy src
+
+  run:
+    desc: Run the CLI
+    cmds:
+      - uv run sm {{.CLI_ARGS}}
+
+  docs:
+    desc: Build documentation
+    cmds:
+      - uv run mkdocs build

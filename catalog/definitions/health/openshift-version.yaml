@@ -1,0 +1,16 @@
+id: openshift.version.readable
+name: OpenShift version readable
+description: Verifies the version resource can be fetched with oc
+module: openshift
+suites: [health]
+kind: command
+timeout: 30s
+severity: medium
+tags: [openshift, version]
+artifacts: [stdout, stderr]
+requires:
+  binaries: [oc]
+  cluster_roles: []
+spec:
+  command: ["oc", "get", "clusterversion", "version", "-o", "json"]
+  parser: json

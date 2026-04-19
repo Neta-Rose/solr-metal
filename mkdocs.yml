@@ -1,0 +1,13 @@
+site_name: solr-metal
+site_description: Bare-metal Kubernetes and OpenShift validation CLI
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.sections
+    - content.code.copy
+nav:
+  - Overview: docs/index.md
+  - User Guide: docs/user-guide.md
+  - Architecture: docs/architecture.md
+  - Developer Guide: docs/developer-guide.md

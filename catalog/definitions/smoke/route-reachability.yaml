@@ -1,0 +1,17 @@
+id: network.route.reachability
+name: Example route reachability
+description: Example HTTP route check for a cluster route
+module: network
+suites: [smoke]
+kind: python
+timeout: 30s
+severity: medium
+tags: [route, http]
+retries:
+  max_attempts: 2
+  backoff: 2s
+requires:
+  binaries: []
+  cluster_roles: []
+spec:
+  entrypoint: catalog/python/check_route.py

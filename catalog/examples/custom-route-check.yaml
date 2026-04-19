@@ -1,0 +1,11 @@
+id: local.route.custom
+name: Local custom route example
+description: Example external test file loaded with --test-file
+module: network
+suites: [smoke]
+kind: python
+timeout: 30s
+severity: medium
+tags: [example]
+spec:
+  entrypoint: catalog/python/check_route.py

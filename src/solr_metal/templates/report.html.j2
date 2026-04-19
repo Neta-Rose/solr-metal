@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>solr-metal report</title>
+  <style>
+    :root {
+      --ink: #122017;
+      --paper: #f4efe1;
+      --panel: #fffdf7;
+      --line: #d8ccb0;
+      --accent: #155e63;
+      --pass: #177245;
+      --fail: #9f2d20;
+      --error: #7c1d6f;
+      --skip: #947335;
+      --timeout: #5f3dc4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(21, 94, 99, 0.18), transparent 24rem),
+        linear-gradient(180deg, #faf6ea 0%, var(--paper) 100%);
+    }
+    main { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    header { margin-bottom: 2rem; }
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin: 0 0 .5rem; letter-spacing: -.04em; }
+    .lede { max-width: 60rem; color: #324237; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .card {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+      backdrop-filter: blur(8px);
+    }
+    .card .value { display: block; font-size: 2rem; font-weight: 700; }
+    .pass { color: var(--pass); }
+    .fail { color: var(--fail); }
+    .error { color: var(--error); }
+    .skip { color: var(--skip); }
+    .timeout { color: var(--timeout); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    th, td { padding: .85rem 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #f0eadc; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
+    tr:last-child td { border-bottom: 0; }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: .2rem .6rem;
+      font-weight: 700;
+      font-size: .85rem;
+      background: rgba(18, 32, 23, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="pill">solr-metal</p>
+      <h1>Cluster Validation Report</h1>
+      <p class="lede">
+        Run <strong>{{ metadata.run_id }}</strong> generated at <strong>{{ metadata.generated_at }}</strong>.
+        This report is a static rendering of the persisted run bundle.
+      </p>
+    </header>
+    <section class="cards">
+      {% for card in summary_cards %}
+      <article class="card">
+        <span>{{ card.label }}</span>
+        <span class="value {{ card.tone }}">{{ card.value }}</span>
+      </article>
+      {% endfor %}
+    </section>
+    <section>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Module</th>
+            <th>Status</th>
+            <th>Duration</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in results %}
+          <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.module }}</td>
+            <td><span class="pill {{ item.status|lower }}">{{ item.status }}</span></td>
+            <td>{{ item.duration }}</td>
+            <td>{{ item.message or (item.error.message if item.error else "") }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
