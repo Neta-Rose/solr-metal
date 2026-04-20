@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 from kubernetes import client, config
 from kubernetes.config.config_exception import ConfigException
@@ -16,10 +17,17 @@ class KubeClients:
 
 
 def load_clients() -> KubeClients:
-    try:
-        config.load_kube_config()
-    except ConfigException:
-        config.load_incluster_config()
+    return load_clients_from(None)
+
+
+def load_clients_from(kubeconfig: Path | None = None) -> KubeClients:
+    if kubeconfig:
+        config.load_kube_config(config_file=str(kubeconfig))
+    else:
+        try:
+            config.load_kube_config()
+        except ConfigException:
+            config.load_incluster_config()
 
     api_client = client.ApiClient()
     return KubeClients(

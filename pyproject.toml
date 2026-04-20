@@ -27,9 +27,9 @@ dependencies = [
   "jinja2>=3.1.4",
   "junitparser>=3.2.0",
   "kubernetes>=31.0.0",
+  "packaging>=24.2",
   "platformdirs>=4.3.6",
   "pydantic>=2.9.2",
-  "pydantic-settings>=2.6.1",
   "pyyaml>=6.0.2",
   "rich>=13.9.4",
   "typer>=0.12.5",
@@ -47,8 +47,28 @@ dev = [
 [project.scripts]
 sm = "solr_metal.cli:app"
 
+[tool.hatch.build]
+include = [
+  "src/solr_metal/**",
+  "README.md",
+  "LICENSE",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/solr_metal"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src/solr_metal",
+  "/tests",
+  "/docs",
+  "/README.md",
+  "/CONTRIBUTING.md",
+  "/LICENSE",
+  "/Taskfile.yml",
+  "/mkdocs.yml",
+  "/pyproject.toml",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

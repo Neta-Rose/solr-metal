@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from importlib import resources
 from pathlib import Path
 
 import yaml
@@ -149,12 +150,24 @@ class Registry:
         self._tests: dict[str, TestDefinition] = {}
 
     @classmethod
-    def load(cls, definitions_dir: Path) -> "Registry":
+    def load(cls, definitions_dirs: list[Path] | Path | None = None) -> "Registry":
         registry = cls()
         for item in builtin_definitions():
             registry.add(item)
 
-        if definitions_dir.exists():
+        for definition in load_packaged_definitions():
+            registry.add(definition)
+
+        if definitions_dirs is None:
+            sources: list[Path] = []
+        elif isinstance(definitions_dirs, Path):
+            sources = [definitions_dirs]
+        else:
+            sources = list(definitions_dirs)
+
+        for definitions_dir in sources:
+            if not definitions_dir.exists():
+                continue
             for path in sorted(definitions_dir.rglob("*.y*ml")):
                 registry.add(load_file(path))
         return registry
@@ -180,3 +193,24 @@ def load_file(path: Path) -> TestDefinition:
     definition = TestDefinition.model_validate(data)
     definition.source = str(path)
     return definition
+
+
+def load_packaged_definitions() -> list[TestDefinition]:
+    root = resources.files("solr_metal").joinpath("catalog", "definitions")
+    out: list[TestDefinition] = []
+    for item in _walk(root):
+        if item.is_dir() or not item.name.endswith((".yaml", ".yml")):
+            continue
+        data = yaml.safe_load(item.read_text(encoding="utf-8")) or {}
+        definition = TestDefinition.model_validate(data)
+        definition.source = f"package:{item.name}"
+        out.append(definition)
+    return sorted(out, key=lambda definition: definition.id)
+
+
+def _walk(root):
+    for item in root.iterdir():
+        if item.is_dir():
+            yield from _walk(item)
+        else:
+            yield item

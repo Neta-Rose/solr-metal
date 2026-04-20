@@ -4,7 +4,7 @@ tasks:
   sync:
     desc: Install project dependencies in a local uv-managed environment
     cmds:
-      - uv sync --extra dev
+      - uv sync --extra dev --locked
 
   test:
     desc: Run unit tests
@@ -17,6 +17,19 @@ tasks:
       - uv run ruff check .
       - uv run mypy src
 
+  build:
+    desc: Build wheel and sdist artifacts
+    cmds:
+      - uv build
+
+  install-wheel:
+    desc: Install the built wheel into a throwaway virtual environment
+    cmds:
+      - uv run python -m venv .venv-wheel
+      - .\.venv-wheel\Scripts\python -m pip install --upgrade pip
+      - .\.venv-wheel\Scripts\python -m pip install dist\*.whl
+      - .\.venv-wheel\Scripts\sm --version
+
   run:
     desc: Run the CLI
     cmds:
@@ -26,3 +39,8 @@ tasks:
     desc: Build documentation
     cmds:
       - uv run mkdocs build
+
+  lock:
+    desc: Refresh the dependency lockfile
+    cmds:
+      - uv lock

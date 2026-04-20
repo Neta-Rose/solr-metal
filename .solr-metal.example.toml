@@ -1,0 +1,12 @@
+[tool.solr-metal]
+output_root = "runs"
+extra_definition_dirs = ["./definitions"]
+kubeconfig = "C:/Users/example/.kube/config"
+pause_image = "registry.k8s.io/pause:3.10"
+dns_image = "busybox:1.36.1"
+pvc_size = "1Gi"
+version_check_enabled = false
+version_source_type = "pypi-json"
+version_source_url = "https://pypi.org/pypi"
+version_source_package = "solr-metal"
+version_check_timeout_seconds = 2.5

@@ -10,4 +10,5 @@ nav:
   - Overview: docs/index.md
   - User Guide: docs/user-guide.md
   - Architecture: docs/architecture.md
+  - Distribution: docs/distribution.md
   - Developer Guide: docs/developer-guide.md

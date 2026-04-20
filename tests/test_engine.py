@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 from solr_metal.artifacts import ArtifactStore
@@ -18,7 +19,7 @@ def test_run_command_pass_captures_artifacts(tmp_path: Path) -> None:
         module="core",
         kind="command",
         timeout="5s",
-        spec={"command": ["cmd", "/c", "echo", "hello"]},
+        spec={"command": [sys.executable, "-c", "print('hello')"]},
     )
     result = engine.run_one(test, "run-123")
     assert result.status == Status.PASS

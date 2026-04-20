@@ -3,7 +3,7 @@
 `solr-metal` is a hybrid runner:
 
 - Python core runtime
-- YAML registry
+- packaged YAML registry
 - Optional Python helper checks
 
 It deliberately keeps shallow trust checks ahead of deeper synthetic workload probes.
@@ -15,6 +15,8 @@ It deliberately keeps shallow trust checks ahead of deeper synthetic workload pr
 - `engine.py`: dispatch, retries, timeouts, artifact capture
 - `builtins.py`: Kubernetes and OpenShift checks using official clients
 - `reports.py`: terminal rendering and persisted report bundle generation
+- `settings.py`: config file, env, and CLI precedence resolution
+- `versioning.py`: installed-version lookup and update-source abstraction
 
 ## Result Model
 
@@ -31,3 +33,7 @@ Every test ends as one of:
 - Builtin checks for reusable, API-first logic
 - YAML command checks for simple probes
 - Python helper checks for custom logic without bloating the core
+
+## Artifact Model
+
+Builtin YAML definitions and helper modules are packaged inside the wheel so installed users do not depend on the source checkout layout.

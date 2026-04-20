@@ -21,4 +21,5 @@ def test_registry_loads_builtins_and_yaml(tmp_path: Path) -> None:
     )
     registry = Registry.load(tmp_path)
     assert registry.get("core.cluster.connected") is not None
+    assert registry.get("openshift.version.readable") is not None
     assert registry.get("custom.test") is not None

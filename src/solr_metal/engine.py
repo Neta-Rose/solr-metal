@@ -114,14 +114,23 @@ class Engine:
             )
 
     def _run_python(self, test: TestDefinition) -> TestResult:
+        module = str(test.spec.get("module", "")).strip()
         entrypoint = str(test.spec.get("entrypoint", "")).strip()
+        if module:
+            args = [str(item) for item in test.spec.get("args", [])]
+            return self._execute_subprocess(
+                test,
+                [sys.executable, "-m", module, *args],
+                cwd=self._spec_path(test.spec.get("cwd")),
+                env=self._spec_env(test),
+            )
         if not entrypoint:
             return self._result(
                 test,
                 Status.ERROR,
                 error=make_error(
                     "PYTHON_SPEC_INVALID",
-                    "spec.entrypoint is required",
+                    "spec.module or spec.entrypoint is required",
                     ErrorCategory.RUNNER,
                 ).model_dump(mode="json"),
             )

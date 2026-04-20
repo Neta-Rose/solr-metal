@@ -14,4 +14,4 @@ requires:
   binaries: []
   cluster_roles: []
 spec:
-  entrypoint: catalog/python/check_route.py
+  module: solr_metal.catalog.python.check_route

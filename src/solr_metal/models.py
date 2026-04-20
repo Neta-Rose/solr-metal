@@ -56,6 +56,7 @@ class ArtifactRef(BaseModel):
 
 class TestDefinition(BaseModel):
     model_config = ConfigDict(extra="allow")
+    __test__ = False
 
     id: str
     name: str = ""
@@ -92,6 +93,7 @@ class TestDefinition(BaseModel):
 
 class TestResult(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    __test__ = False
 
     id: str
     name: str

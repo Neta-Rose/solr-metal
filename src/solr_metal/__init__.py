@@ -1,5 +1,5 @@
 """solr-metal package."""
 
-__all__ = ["__version__"]
+from solr_metal.versioning import current_version
 
-__version__ = "0.1.0"
+__all__ = ["current_version"]
